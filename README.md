@@ -1,0 +1,1 @@
+# crypto-ai-analysis-flet-app
