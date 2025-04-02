@@ -1,7 +1,87 @@
 import flet as ft
+from ai_utils import client, start_news_analysis
+from time import sleep
 
 
 def home_page(page):
+    def start_analysis_click(e):
+        start_button.visible = False
+        progress_ring.visible = True
+        page.update()
+
+        # analysis_data = start_news_analysis(client)
+        sleep(10)
+        analysis_data = {
+            "summary": "The articles highlight significant developments in the cryptocurrency market, including institutional adoption, regulatory advancements, and technological upgrades. Bitcoin and Ethereum remain central to these narratives, with Bitcoin seeing increased institutional interest and Ethereum progressing in its technological roadmap. Altcoins like Cardano, XRP, and Cosmos are also making strides in adoption and interoperability. Overall, the market sentiment leans towards cautious optimism with a mix of bullish and neutral trends.",
+            "top_articles": [
+                {
+                    "title": "GameStop Completes $1.5 Billion Offering to Fund Bitcoin Reserve",
+                    "url": "https://decrypt.co",
+                    "description": "GameStop has raised $1.5 billion to establish a Bitcoin reserve, signaling increased institutional interest in Bitcoin as a store of value.",
+                    "sentiment": "Positive",
+                },
+                {
+                    "title": "Mastercard Plans to Enable 3.5 Billion Cardholders to Transact with Bitcoin ($BTC) and Crypto",
+                    "url": "https://thedefiant.io",
+                    "description": "Mastercard's initiative to integrate crypto transactions for its global user base could significantly boost mainstream adoption of Bitcoin and other cryptocurrencies.",
+                    "sentiment": "Positive",
+                },
+                {
+                    "title": "Ethereum edges closer to deploying Pectra on mainnet with successful upgrade on Hoodi testnet",
+                    "url": "https://theblock.co",
+                    "description": "Ethereum's Pectra upgrade demonstrates progress in its technological evolution, potentially enhancing its scalability and utility.",
+                    "sentiment": "Positive",
+                },
+                {
+                    "title": "Cardano (ADA) Achieves New Coinbase Listing, and It's Both Institutional and Retail",
+                    "url": "https://u.today",
+                    "description": "Cardano's inclusion on Coinbase for both institutional and retail trading highlights its growing acceptance and potential for price appreciation.",
+                    "sentiment": "Positive",
+                },
+                {
+                    "title": "BlackRock's Larry Fink: U.S. Dollar risks losing global reserve status to Bitcoin if U.S. doesn't get debt under control.",
+                    "url": "https://BTC_Archive",
+                    "description": "BlackRock's CEO underscores Bitcoin's potential as a global reserve asset amidst concerns over U.S. fiscal policy, reflecting a bullish outlook for BTC.",
+                    "sentiment": "Positive",
+                },
+            ],
+            "investment_opportunities": [
+                "Bitcoin (BTC)",
+                "Ethereum (ETH)",
+                "Cardano (ADA)",
+                "Cosmos (ATOM)",
+                "Ripple (XRP)",
+            ],
+            "market_trend": {"status": "Bullish", "confidence": "75%"},
+        }
+
+        if "error" in analysis_data:
+            page.add(ft.Text("Error: Unable to get analysis"))
+        else:
+            page.go("/analysis", data=analysis_data)
+
+    start_button = ft.FilledButton(
+        content=ft.Row(
+            controls=[
+                ft.Text("Start Market Analysis"),
+                ft.Icon(name=ft.Icons.ARROW_FORWARD, color=ft.colors.WHITE),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+        ),
+        color=ft.colors.WHITE,
+        bgcolor="#4F46E5",
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=ft.border_radius.all(10))
+        ),
+        height=60,
+        width=350,
+        on_click=start_analysis_click,
+    )
+
+    progress_ring = ft.ProgressRing(
+        width=50, height=50, stroke_width=5, color="#4F46E5", visible=False
+    )
+
     appBar = ft.Container(
         content=ft.Container(
             content=ft.Row(
@@ -136,22 +216,8 @@ def home_page(page):
                     border_radius=ft.border_radius.all(20),
                     alignment=ft.alignment.center,
                 ),
-                ft.FilledButton(
-                    content=ft.Row(
-                        controls=[
-                            ft.Text("Start Market Analysis"),
-                            ft.Icon(name=ft.Icons.ARROW_FORWARD, color=ft.colors.WHITE),
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                    ),
-                    color=ft.colors.WHITE,
-                    bgcolor="#4F46E5",
-                    style=ft.ButtonStyle(
-                        shape=ft.RoundedRectangleBorder(radius=ft.border_radius.all(10))
-                    ),
-                    height=60,
-                    width=350,
-                ),
+                start_button,
+                progress_ring,
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
