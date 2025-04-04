@@ -1,6 +1,7 @@
 import flet as ft
 from ai_utils import client, start_news_analysis
 from time import sleep
+from json_utils import save_data_to_file
 
 
 def home_page(page):
@@ -10,55 +11,70 @@ def home_page(page):
         page.update()
 
         # analysis_data = start_news_analysis(client)
-        sleep(10)
+        sleep(3)
         analysis_data = {
-            "summary": "The articles highlight significant developments in the cryptocurrency market, including institutional adoption, regulatory advancements, and technological upgrades. Bitcoin and Ethereum remain central to these narratives, with Bitcoin seeing increased institutional interest and Ethereum progressing in its technological roadmap. Altcoins like Cardano, XRP, and Cosmos are also making strides in adoption and interoperability. Overall, the market sentiment leans towards cautious optimism with a mix of bullish and neutral trends.",
+            "summary": "The crypto market is currently experiencing mixed sentiments. Bitcoin shows signs of adoption with Mastercard's initiative, while Ethereum faces bearish pressure due to technical concerns and whale sell-offs. Altcoins like Solana and Ripple's RLUSD are gaining traction due to ETF approval signals and stablecoin integration. Market trends suggest a neutral stance with cautious optimism for long-term investments.",
             "top_articles": [
-                {
-                    "title": "GameStop Completes $1.5 Billion Offering to Fund Bitcoin Reserve",
-                    "url": "https://decrypt.co",
-                    "description": "GameStop has raised $1.5 billion to establish a Bitcoin reserve, signaling increased institutional interest in Bitcoin as a store of value.",
-                    "sentiment": "Positive",
-                },
                 {
                     "title": "Mastercard Plans to Enable 3.5 Billion Cardholders to Transact with Bitcoin ($BTC) and Crypto",
                     "url": "https://thedefiant.io",
-                    "description": "Mastercard's initiative to integrate crypto transactions for its global user base could significantly boost mainstream adoption of Bitcoin and other cryptocurrencies.",
+                    "description": "Mastercard's plan to enable crypto transactions for 3.5 billion cardholders marks a significant step in crypto adoption, potentially boosting Bitcoin's utility and value.",
                     "sentiment": "Positive",
                 },
                 {
-                    "title": "Ethereum edges closer to deploying Pectra on mainnet with successful upgrade on Hoodi testnet",
+                    "title": "Signs point to approval of Solana ETFs in May",
+                    "url": "https://cryptovalleyjournal.com",
+                    "description": "The potential approval of Solana ETFs could attract institutional investors, driving liquidity and price growth for Solana.",
+                    "sentiment": "Positive",
+                },
+                {
+                    "title": "Ethereum developers aim for May 7 mainnet deployment of Pectra upgrade",
                     "url": "https://theblock.co",
-                    "description": "Ethereum's Pectra upgrade demonstrates progress in its technological evolution, potentially enhancing its scalability and utility.",
-                    "sentiment": "Positive",
+                    "description": "The upcoming Pectra upgrade for Ethereum aims to improve scalability and network efficiency, but technical hurdles have delayed its deployment.",
+                    "sentiment": "Neutral",
                 },
                 {
-                    "title": "Cardano (ADA) Achieves New Coinbase Listing, and It's Both Institutional and Retail",
-                    "url": "https://u.today",
-                    "description": "Cardano's inclusion on Coinbase for both institutional and retail trading highlights its growing acceptance and potential for price appreciation.",
-                    "sentiment": "Positive",
+                    "title": "Analyst Warns of Massive Ethereum Drop Against Bitcoin",
+                    "url": "https://cryptodnes.bg",
+                    "description": "A bearish technical pattern suggests Ethereum may face significant downside against Bitcoin, raising concerns for ETH holders.",
+                    "sentiment": "Negative",
                 },
                 {
-                    "title": "BlackRock's Larry Fink: U.S. Dollar risks losing global reserve status to Bitcoin if U.S. doesn't get debt under control.",
-                    "url": "https://BTC_Archive",
-                    "description": "BlackRock's CEO underscores Bitcoin's potential as a global reserve asset amidst concerns over U.S. fiscal policy, reflecting a bullish outlook for BTC.",
+                    "title": "Kraken Announces Support for RLUSD As Stablecoin Integrates Into Ripple’s Payment’s Network",
+                    "url": "https://dailyhodl.com",
+                    "description": "Kraken's support for RLUSD and its integration into Ripple's network highlights growing adoption of Ripple's payment solutions.",
                     "sentiment": "Positive",
                 },
             ],
             "investment_opportunities": [
-                "Bitcoin (BTC)",
-                "Ethereum (ETH)",
-                "Cardano (ADA)",
-                "Cosmos (ATOM)",
-                "Ripple (XRP)",
+                {
+                    "name": "Bitcoin (BTC)",
+                    "price": "$66,200.00",
+                    "performance": "+3.8%",
+                    "signal": "Buy",
+                },
+                {
+                    "name": "Solana (SOL)",
+                    "price": "$145.75",
+                    "performance": "+6.1%",
+                    "signal": "Strong Buy",
+                },
+                {
+                    "name": "Ripple (XRP)",
+                    "price": "$0.63",
+                    "performance": "+4.5%",
+                    "signal": "Buy",
+                },
             ],
-            "market_trend": {"status": "Bullish", "confidence": "75%"},
+            "market_trend": {"status": "Neutral", "confidence": "65%"},
         }
+
+        save_data_to_file(analysis_data)
 
         if "error" in analysis_data:
             page.add(ft.Text("Error: Unable to get analysis"))
         else:
-            page.go("/analysis", data=analysis_data)
+            page.go("/analysis")
 
     start_button = ft.FilledButton(
         content=ft.Row(

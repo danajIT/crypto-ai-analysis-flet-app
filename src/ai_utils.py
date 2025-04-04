@@ -27,52 +27,72 @@ def start_news_analysis(client):
         )
 
         prompt = f"""
-        Analyze the following crypto news articles and provide insights based on the following:
+Analyze the following crypto news articles and other important crypto news and trends, and provide insights based on the following:
 
-        - The potential impact of these articles on Bitcoin and Ethereum.
-        - Key developments for altcoins mentioned in the news.
-        - A summary of trends in the market based on these articles.
+1. The potential impact of these articles on Bitcoin and Ethereum.
+2. Key developments for altcoins mentioned in the news.
+3. A summary of trends in the market based on these articles.
 
-        I also need:
+I also need:
 
-        Top 5 Important Articles
-           - Provide the title, link, and a short 2-3 sentence description.  
-           - Assign a sentiment rating (Positive, Neutral, or Negative).  
+**Top 5 Important Articles**
+- Provide the title, link, and a short 2-3 sentence description.
+- Assign a sentiment rating: "Positive", "Neutral", or "Negative".
 
-        Cryptocurrencies to Invest In  
-           - List 3-5 coins with strong potential based on the news analysis.  
+**3-5 Cryptocurrencies to Invest In**
+- Provide 3 to 5 cryptocurrencies that show strong potential for investment.
+- For each coin, include:
+  - `name`: The cryptocurrency name and symbol.
+  - `price`: The current price in USD.
+  - `performance`: Its recent performance percentage (positive or negative, e.g. +5.2% or -3.1%).
+  - `signal`: The investment recommendation ("Strong Buy", "Buy", or "Hold").
+- If the market is currently unfavorable for investment, return an empty array.
 
-        Market Trend Analysis 
-           - Indicate if the market is Bullish, Bearish, or Neutral.  
-           - Provide a confidence percentage for the trend prediction.
+**Market Trend Analysis**
+- Indicate if the market is "Bullish", "Bearish", or "Neutral".
+- Provide a confidence percentage (e.g. "75%").
 
-        Here are the articles:
+Use the following input articles:
 
-        {articles_data}
+{articles_data}
 
-        Please ensure that the summary is focused on the impact of the articles on crypto market trends and sentiments.
-        All of that information I need in JSON format
+### FORMAT REQUIREMENTS:
+- Your response MUST be valid JSON.
+- Do NOT include any extra text or markdown — only the raw JSON.
+- Always use the exact field names shown below.
 
-        ### IMPORTANT:
-        - Your response **MUST** be a valid JSON.
-        - Do **NOT** include extra explanations or markdown.
-        - **Only return JSON**, formatted correctly.
+### OUTPUT FORMAT (Strict JSON Template):
 
-        ### JSON Output Format (Example)
-          "summary": "summary what you provide",
-          "top_articles": [
-              "title": "Title of the article",
-              "url": "Direct link to the article",
-              "description": "Short summary of the article",
-              "sentiment": "Positive/Negative/Neutral"
-          ],
-          "investment_opportunities": [
-            "List of cryptocurrencies recommended for investment"
-          ],
-          "market_trend":
-            "status": "Bullish/Bearish/Neutral",
-            "confidence": "Confidence percentage in %"
-        """
+{{
+  "summary": "A concise summary of the impact of the articles on the crypto market, Bitcoin, Ethereum, and altcoins.",
+  "top_articles": [
+    {{
+      "title": "Article Title",
+      "url": "https://example.com",
+      "description": "2-3 sentence summary of the article.",
+      "sentiment": "Positive" | "Neutral" | "Negative"
+    }},
+    ...
+  ],
+  "investment_opportunities": [
+    {{
+      "name": "Bitcoin (BTC)",
+      "price": "$65,342.21",
+      "performance": "+4.2%",
+      "signal": "Buy"
+    }},
+    ...
+  ],
+  "market_trend": {{
+    "status": "Bullish" | "Bearish" | "Neutral",
+    "confidence": "76%"
+  }}
+}}
+
+### IMPORTANT:
+- If **no cryptocurrencies are recommended**, return `"investment_opportunities": []`.
+- Use only the listed `signal` and `status` values. Do not invent new ones.
+"""
 
         response = client.chat.completions.create(
             model="gpt-4o",

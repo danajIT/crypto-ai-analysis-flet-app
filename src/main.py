@@ -1,4 +1,6 @@
 import flet as ft
+import urllib.parse
+import json
 from pages.home_page import home_page
 from pages.analysis_page import analysis_page
 
@@ -15,13 +17,13 @@ def main_flet(page: ft.Page):
 
         if page.route == "/home":
             page.views.append(home_page(page))
-        elif page.route == "/analysis":
+        elif page.route.startswith("/analysis"):
             page.views.append(analysis_page(page))
 
         page.update()
 
     page.on_route_change = route_change
-    page.go("/analysis")
+    page.go("/home")
 
 
 if __name__ == "__main__":
