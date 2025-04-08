@@ -1,7 +1,12 @@
 import flet as ft
-from ai_utils import client, start_news_analysis
+from utils.ai_utils import client, start_news_analysis
 from time import sleep
-from json_utils import save_data_to_file
+from utils.json_utils import (
+    save_data_to_file,
+    update_crypto_data,
+    extract_crypto_symbols,
+)
+from utils.crypto_prices_utils import fetch_crypto_prices
 
 
 def home_page(page):
@@ -9,66 +14,70 @@ def home_page(page):
         start_button.visible = False
         progress_ring.visible = True
         page.update()
-
-        # analysis_data = start_news_analysis(client)
-        sleep(3)
+        # sleep(3)
         analysis_data = {
-            "summary": "The crypto market is currently experiencing mixed sentiments. Bitcoin shows signs of adoption with Mastercard's initiative, while Ethereum faces bearish pressure due to technical concerns and whale sell-offs. Altcoins like Solana and Ripple's RLUSD are gaining traction due to ETF approval signals and stablecoin integration. Market trends suggest a neutral stance with cautious optimism for long-term investments.",
+            "summary": "The crypto market is facing mixed signals, with Bitcoin showing potential for decoupling from traditional equities and Ethereum struggling amidst bearish sentiment. Altcoins like Solana are gaining traction due to potential ETF approvals, while DeFi narratives are shifting towards Bitcoin. Ethereum's technical upgrades and whale activity suggest long-term potential despite short-term bearish outlooks.",
             "top_articles": [
                 {
-                    "title": "Mastercard Plans to Enable 3.5 Billion Cardholders to Transact with Bitcoin ($BTC) and Crypto",
-                    "url": "https://thedefiant.io",
-                    "description": "Mastercard's plan to enable crypto transactions for 3.5 billion cardholders marks a significant step in crypto adoption, potentially boosting Bitcoin's utility and value.",
+                    "title": "Bitcoin shows signs of decoupling from US equities, could reclaim $100K",
+                    "url": "https://cryptobriefing.com",
+                    "description": "Bitcoin is showing signs of decoupling from traditional markets, with analysts predicting a potential rally to $100K. This could signal increased institutional interest and a shift in market dynamics.",
                     "sentiment": "Positive",
                 },
                 {
                     "title": "Signs point to approval of Solana ETFs in May",
                     "url": "https://cryptovalleyjournal.com",
-                    "description": "The potential approval of Solana ETFs could attract institutional investors, driving liquidity and price growth for Solana.",
+                    "description": "Regulatory signals suggest that Solana-based ETFs could be approved in May, potentially driving increased institutional adoption and market interest in the altcoin.",
                     "sentiment": "Positive",
                 },
                 {
-                    "title": "Ethereum developers aim for May 7 mainnet deployment of Pectra upgrade",
-                    "url": "https://theblock.co",
-                    "description": "The upcoming Pectra upgrade for Ethereum aims to improve scalability and network efficiency, but technical hurdles have delayed its deployment.",
+                    "title": "Ethereum whales accumulate 130,000 ETH amid price drop",
+                    "url": "https://cryptobriefing.com",
+                    "description": "Despite Ethereum's recent price decline, whale investors are accumulating large amounts of ETH, indicating confidence in the asset's long-term potential.",
                     "sentiment": "Neutral",
                 },
                 {
-                    "title": "Analyst Warns of Massive Ethereum Drop Against Bitcoin",
-                    "url": "https://cryptodnes.bg",
-                    "description": "A bearish technical pattern suggests Ethereum may face significant downside against Bitcoin, raising concerns for ETH holders.",
+                    "title": "Ethereum faces a storm: Could the crypto giant plummet by 91%?",
+                    "url": "https://cointrackdaily.com",
+                    "description": "Bearish analysts warn of a potential massive price drop for Ethereum, citing technical indicators and growing competition from Bitcoin in DeFi.",
                     "sentiment": "Negative",
                 },
                 {
-                    "title": "Kraken Announces Support for RLUSD As Stablecoin Integrates Into Ripple’s Payment’s Network",
-                    "url": "https://dailyhodl.com",
-                    "description": "Kraken's support for RLUSD and its integration into Ripple's network highlights growing adoption of Ripple's payment solutions.",
-                    "sentiment": "Positive",
+                    "title": "The future of DeFi isn’t on Ethereum — it’s on Bitcoin",
+                    "url": "https://cointelegraph.com",
+                    "description": "A growing narrative suggests that Bitcoin could become the primary platform for DeFi, challenging Ethereum's dominance in the sector.",
+                    "sentiment": "Neutral",
                 },
             ],
             "investment_opportunities": [
                 {
-                    "name": "Bitcoin (BTC)",
-                    "price": "$66,200.00",
-                    "performance": "+3.8%",
+                    "name": "Bitcoin",
+                    "symbol": "BTC",
+                    "price": 83686.82,
+                    "performance": "0.33%",
                     "signal": "Buy",
                 },
                 {
-                    "name": "Solana (SOL)",
-                    "price": "$145.75",
-                    "performance": "+6.1%",
+                    "name": "Solana",
+                    "symbol": "SOL",
+                    "price": 121.32,
+                    "performance": "-4.16%",
                     "signal": "Strong Buy",
                 },
                 {
-                    "name": "Ripple (XRP)",
-                    "price": "$0.63",
-                    "performance": "+4.5%",
-                    "signal": "Buy",
+                    "name": "Ethereum",
+                    "symbol": "ETH",
+                    "price": 1817.43,
+                    "performance": "-3.16%",
+                    "signal": "Hold",
                 },
             ],
             "market_trend": {"status": "Neutral", "confidence": "65%"},
         }
-
+        analysis_data = start_news_analysis(client)
+        symbols = extract_crypto_symbols(analysis_data)
+        crypto_real_time_info = fetch_crypto_prices(symbols)
+        update_crypto_data(analysis_data, crypto_real_time_info)
         save_data_to_file(analysis_data)
 
         if "error" in analysis_data:
@@ -163,8 +172,14 @@ def home_page(page):
                                         ft.Text(
                                             value="AI Prediction",
                                             weight=ft.FontWeight.BOLD,
+                                            size=14,
                                         ),
-                                        ft.Text(value="Smart market forecasting"),
+                                        ft.Text(
+                                            value="Smart market forecasting",
+                                            color="#7A7F8E",
+                                            size=12,
+                                            weight=ft.FontWeight.W_600,
+                                        ),
                                     ],
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),
@@ -187,8 +202,14 @@ def home_page(page):
                                         ft.Text(
                                             value="News Analysis",
                                             weight=ft.FontWeight.BOLD,
+                                            size=14,
                                         ),
-                                        ft.Text(value="Real-time news impact"),
+                                        ft.Text(
+                                            value="Real-time news impact",
+                                            color="#7A7F8E",
+                                            size=12,
+                                            weight=ft.FontWeight.W_600,
+                                        ),
                                     ],
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),
