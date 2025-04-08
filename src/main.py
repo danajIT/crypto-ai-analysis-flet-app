@@ -1,6 +1,4 @@
 import flet as ft
-import urllib.parse
-import json
 from pages.home_page import home_page
 from pages.analysis_page import analysis_page
 

@@ -1,6 +1,6 @@
 from openai import OpenAI
 from dotenv import load_dotenv
-from crypto_news_utils import fetch_crypto_news
+from utils.crypto_news_utils import fetch_crypto_news
 import os
 import json
 
@@ -42,9 +42,10 @@ I also need:
 **3-5 Cryptocurrencies to Invest In**
 - Provide 3 to 5 cryptocurrencies that show strong potential for investment.
 - For each coin, include:
-  - `name`: The cryptocurrency name and symbol.
-  - `price`: The current price in USD.
-  - `performance`: Its recent performance percentage (positive or negative, e.g. +5.2% or -3.1%).
+  - `name`: The cryptocurrency name.
+  - `symbol`: The cryptocurrency symbol.
+  - `price`: leave this as empty string.
+  - `performance`: leave this as empty string.
   - `signal`: The investment recommendation ("Strong Buy", "Buy", or "Hold").
 - If the market is currently unfavorable for investment, return an empty array.
 
@@ -76,9 +77,10 @@ Use the following input articles:
   ],
   "investment_opportunities": [
     {{
-      "name": "Bitcoin (BTC)",
-      "price": "$65,342.21",
-      "performance": "+4.2%",
+      "name": "Bitcoin",
+      "symbol": "BTC",
+      "price": "",
+      "performance": "",
       "signal": "Buy"
     }},
     ...

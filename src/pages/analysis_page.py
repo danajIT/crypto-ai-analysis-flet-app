@@ -1,5 +1,5 @@
 import flet as ft
-from json_utils import load_data_from_file
+from utils.json_utils import load_data_from_file
 
 
 def analysis_page(page):
@@ -65,10 +65,10 @@ def analysis_page(page):
         )
 
     def create_investment_card(item):
-        if item["performance"].startswith("+"):
-            performance_color = "#10B57F"
-        else:
+        if item["performance"].startswith("-"):
             performance_color = "#E13800"
+        else:
+            performance_color = "#10B57F"
 
         if item["signal"] == "Strong Buy" or item["signal"] == "Buy":
             signal_color = "#10B57F"
@@ -83,13 +83,23 @@ def analysis_page(page):
                     controls=[
                         ft.Row(
                             controls=[
-                                ft.Text(
-                                    value=item["name"],
-                                    weight=ft.FontWeight.BOLD,
-                                    size=14,
+                                ft.Row(
+                                    [
+                                        ft.Text(
+                                            value=item["name"],
+                                            weight=ft.FontWeight.BOLD,
+                                            size=14,
+                                        ),
+                                        ft.Text(
+                                            value=item["symbol"],
+                                            weight=ft.FontWeight.W_600,
+                                            size=12,
+                                            color="#7A7F8E",
+                                        ),
+                                    ]
                                 ),
                                 ft.Text(
-                                    value=item["price"],
+                                    value=f"${item["price"]}",
                                     weight=ft.FontWeight.BOLD,
                                     size=14,
                                 ),
