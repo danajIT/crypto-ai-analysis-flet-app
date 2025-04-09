@@ -1,82 +1,66 @@
-# crypto-ai-analysis-flet-app
+# 🧠 Crypto AI Analyst
 
-## Run the app
+A Python application that uses AI to analyze cryptocurrency news and provide insights, sentiment analysis, market trends, and investment recommendations.
 
-### uv
+---
 
-Run as a desktop app:
+## 🚀 Features
 
-```
-uv run flet run
-```
+- 🔍 Fetches real-time crypto news from **CryptoPanic**.
+- 📊 Retrieves price data from **CoinMarketCap**.
+- 🤖 Uses **OpenAI GPT** to analyze news articles and provide:
+  - Summary of news impact on Bitcoin, Ethereum, and altcoins.
+  - Sentiment for each top article.
+  - Suggested cryptocurrencies to invest in.
+  - Overall market trend analysis (Bullish/Bearish/Neutral).
 
-Run as a web app:
+---
 
-```
-uv run flet run --web
-```
+## ⚙️ Installation
 
-### Poetry
+### Clone the Repository
 
-Install dependencies from `pyproject.toml`:
-
-```
-poetry install
-```
-
-Run as a desktop app:
-
-```
-poetry run flet run
+```bash
+git clone https://github.com/yourusername/crypto-ai-analyst.git
+cd crypto-ai-analyst
 ```
 
-Run as a web app:
+### Install Dependencies with Pipenv
 
-```
-poetry run flet run --web
-```
-
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
-
-## Build the app
-
-### Android
-
-```
-flet build apk -v
+```bash
+pip install pipenv
+pipenv install
+pipenv shell
 ```
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
+---
 
-### iOS
+## 🔑 Set Up Environment Variables
 
-```
-flet build ipa -v
-```
+### Create a .env file in the root directory of the project
 
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
+- OPENAI_API_KEY=your_openai_api_key
+- OPENAI_API_ENDPOINT=https://api.openai.com/v1
+- CRYPTO_PANIC_API_KEY=your_crypto_panic_api_key
+- COIN_MARKET_CAP_API_KEY=your_coinmarketcap_api_key
 
-### macOS
+---
 
-```
-flet build macos -v
-```
+## ▶️ Running the App
 
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```
-flet build linux -v
+```bash
+flet run main.py
 ```
 
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
+## App Screenshots
 
-### Windows
+![Home page](src/assets/app_screenshots/home_page.png)
 
-```
-flet build windows -v
-```
+![Summary](src/assets/app_screenshots/summary.png)
 
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
->>>>>>> 27dab7b (Initial commit)
+![News](src/assets/app_screenshots/news.png)
+
+![Summary](src/assets/app_screenshots/opportunities.png)
+
+![Summary](src/assets/app_screenshots/trend.png)
+
